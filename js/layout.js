@@ -272,4 +272,13 @@
   KQS.openSearch = openSearch;
   KQS.closeSearch = closeSearch;
   KQS.goSearch = goSearch;
+
+  const firebaseSrc = KQS.href("js/firebase.js");
+  if (!document.querySelector(`script[data-kqs-firebase]`)) {
+    const s = document.createElement("script");
+    s.src = firebaseSrc;
+    s.async = true;
+    s.dataset.kqsFirebase = "1";
+    document.head.appendChild(s);
+  }
 })();
