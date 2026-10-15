@@ -1,0 +1,8 @@
+/sitemap.txt
+  Content-Type: application/xml; charset=utf-8
+
+/sitemap-pages.txt
+  Content-Type: application/xml; charset=utf-8
+
+/sitemaps/*.txt
+  Content-Type: application/xml; charset=utf-8
