@@ -11,6 +11,7 @@ KQS.productDataBase = (() => {
     return (root || "") + "/js/products/";
   }
   const base = path.replace(/\/index\.html$/i, "").replace(/\/$/, "");
+  // Keep root-absolute so nested pages never request /shop/.../js/products/
   return (base || "") + "/js/products/";
 })();
 

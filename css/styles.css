@@ -634,6 +634,8 @@ a:hover {
   border: 1px solid var(--line);
   border-radius: 8px;
   overflow: hidden;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 280px;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -684,8 +686,15 @@ a:hover {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   gap: 0.4rem;
   margin-top: 1.75rem;
+}
+
+.pager-gap {
+  color: var(--muted);
+  padding: 0 0.15rem;
+  user-select: none;
 }
 
 .pager a {

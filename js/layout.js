@@ -264,7 +264,24 @@
     document.body.classList.remove("search-open");
   }
 
+  function ensurePerfHints() {
+    const hints = [
+      ["preconnect", "https://gcore.jsdelivr.net", true],
+      ["dns-prefetch", "https://gcore.jsdelivr.net", false],
+      ["preconnect", "https://fonts.gstatic.com", true],
+    ];
+    hints.forEach(([rel, href, cross]) => {
+      if (document.querySelector(`link[rel="${rel}"][href="${href}"]`)) return;
+      const link = document.createElement("link");
+      link.rel = rel;
+      link.href = href;
+      if (cross) link.crossOrigin = "anonymous";
+      document.head.appendChild(link);
+    });
+  }
+
   KQS.mountLayout = (active) => {
+    ensurePerfHints();
     mountHeader(active);
     mountFooter();
   };

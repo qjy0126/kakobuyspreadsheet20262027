@@ -2,7 +2,7 @@
 window.KQS = window.KQS || {};
 
 KQS.sheetOrigin = "https://kakobuysheetlink.com";
-KQS.productCdn = "https://cdn.jsdelivr.net/gh/qjy0126/kakobuysheetlink@main/img/products/";
+KQS.productCdn = "https://gcore.jsdelivr.net/gh/qjy0126/kakobuysheetlink@main/img/products/";
 
 KQS.categories = [
   { slug: "shoes", label: "Shoes", nav: "Shoes", image: "7867051600.webp" },

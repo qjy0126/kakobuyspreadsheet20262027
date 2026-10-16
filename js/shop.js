@@ -1,5 +1,6 @@
 (() => {
-  const PAGE_SIZE = 72;
+  const PAGE_SIZE = 24;
+  const EAGER_IMAGES = 6;
   const root = document.querySelector("[data-shop]");
   if (!root || !window.KQS) return;
 
@@ -60,15 +61,18 @@
 
     if (grid) {
       grid.innerHTML = slice
-        .map((p) => {
+        .map((p, i) => {
           const opts = Math.max(1, Number(p.options) || 1);
           const label = opts > 1 ? `${opts} OPTIONS` : p.title;
+          const eager = i < EAGER_IMAGES;
+          const loading = eager ? "eager" : "lazy";
+          const fetchPriority = i === 0 ? ' fetchpriority="high"' : eager ? ' fetchpriority="low"' : "";
           return `
         <a class="product-card" href="${KQS.productHref(p.id, p.category)}">
           <span class="product-media">
-            <img src="${KQS.productImg(p.image, p.local)}" alt="${p.title}" loading="lazy" decoding="async" width="400" height="400" />
+            <img src="${KQS.productImg(p.image, p.local)}" alt="${KQS.escapeHtml(p.title)}" loading="${loading}" decoding="async" width="280" height="280" sizes="(max-width: 640px) 50vw, (max-width: 1100px) 25vw, 160px"${fetchPriority} />
           </span>
-          <h2>${label}</h2>
+          <h2>${KQS.escapeHtml(label)}</h2>
           <p class="price">${KQS.money(p.price)}</p>
         </a>`;
         })
@@ -80,17 +84,26 @@
       if (pages <= 1) {
         pager.innerHTML = "";
       } else {
-        const items = [];
         const qs = (n) => {
           const sp = new URLSearchParams();
           if (q) sp.set("q", q);
           if (n > 1) sp.set("page", String(n));
           const s = sp.toString();
-          return s ? `?${s}` : "?";
+          return s ? `?${s}` : location.pathname;
         };
-        for (let i = 1; i <= pages; i++) {
-          items.push(`<a class="${i === page ? "is-current" : ""}" href="${qs(i)}">${i}</a>`);
+        const nums = new Set([1, pages, page - 1, page, page + 1]);
+        for (let i = page - 2; i <= page + 2; i++) {
+          if (i >= 1 && i <= pages) nums.add(i);
         }
+        const sorted = [...nums].sort((a, b) => a - b);
+        const items = [];
+        if (page > 1) items.push(`<a href="${qs(page - 1)}" aria-label="Previous">←</a>`);
+        let prev = 0;
+        sorted.forEach((i) => {
+          if (prev && i - prev > 1) items.push(`<span class="pager-gap" aria-hidden="true">…</span>`);
+          items.push(`<a class="${i === page ? "is-current" : ""}" href="${qs(i)}">${i}</a>`);
+          prev = i;
+        });
         if (page < pages) items.push(`<a href="${qs(page + 1)}" aria-label="Next">→</a>`);
         pager.innerHTML = items.join("");
       }
